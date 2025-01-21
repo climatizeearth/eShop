@@ -10,4 +10,3 @@ public interface IBuyerRepository : IRepository<Buyer>
     Task<Buyer> FindAsync(string BuyerIdentityGuid);
     Task<Buyer> FindByIdAsync(int id);
 }
-
