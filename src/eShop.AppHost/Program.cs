@@ -4,7 +4,6 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 builder.AddForwardedHeaders();
 
-var redis = builder.AddRedis("redis");
 var rabbitMq = builder.AddRabbitMQ("eventbus").WithLifetime(ContainerLifetime.Persistent);
 var postgres = builder
     .AddPostgres("postgres")
@@ -12,10 +11,8 @@ var postgres = builder
     .WithImageTag("latest")
     .WithLifetime(ContainerLifetime.Persistent);
 
-var catalogDb = postgres.AddDatabase("catalogdb");
 var identityDb = postgres.AddDatabase("identitydb");
 var orderDb = postgres.AddDatabase("orderingdb");
-var webhooksDb = postgres.AddDatabase("webhooksdb");
 
 var launchProfileName = ShouldUseHttpForEndpoints() ? "http" : "https";
 
@@ -35,13 +32,6 @@ var orderingApi = builder
     .WaitFor(orderDb)
     .WithHttpHealthCheck("/health")
     .WithEnvironment("Identity__Url", identityEndpoint);
-
-builder
-    .AddProject<Projects.OrderProcessor>("order-processor")
-    .WithReference(rabbitMq)
-    .WaitFor(rabbitMq)
-    .WithReference(orderDb)
-    .WaitFor(orderingApi); // wait for the orderingApi to be ready because that contains the EF migrations
 
 // Identity has a reference to all of the apps for callback urls, this is a cyclic reference
 identityApi.WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"));

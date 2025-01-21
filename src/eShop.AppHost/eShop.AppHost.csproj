@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Identity.API\Identity.API.csproj" />
     <ProjectReference Include="..\Ordering.API\Ordering.API.csproj" />
-    <ProjectReference Include="..\OrderProcessor\OrderProcessor.csproj" />
   </ItemGroup>
 
 </Project>
