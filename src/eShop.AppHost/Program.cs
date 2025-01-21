@@ -43,11 +43,6 @@ builder
     .WithReference(orderDb)
     .WaitFor(orderingApi); // wait for the orderingApi to be ready because that contains the EF migrations
 
-builder
-    .AddProject<Projects.PaymentProcessor>("payment-processor")
-    .WithReference(rabbitMq)
-    .WaitFor(rabbitMq);
-
 // Identity has a reference to all of the apps for callback urls, this is a cyclic reference
 identityApi.WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"));
 
