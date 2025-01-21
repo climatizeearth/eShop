@@ -1,7 +1,3 @@
-# Prerequisites
-
-Start Docker
-
 # Usage
 
 ```
@@ -15,6 +11,10 @@ dotnet workload restore
 dotnet restore
 dotnet build
 
+# Start Docker
+start "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+
+# Start the App
 dotnet run --project .\src\eShop.AppHost\
 ```
 
