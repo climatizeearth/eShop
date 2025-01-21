@@ -48,17 +48,8 @@ builder
     .WithReference(rabbitMq)
     .WaitFor(rabbitMq);
 
-var webHooksApi = builder
-    .AddProject<Projects.Webhooks_API>("webhooks-api")
-    .WithReference(rabbitMq)
-    .WaitFor(rabbitMq)
-    .WithReference(webhooksDb)
-    .WithEnvironment("Identity__Url", identityEndpoint);
-
 // Identity has a reference to all of the apps for callback urls, this is a cyclic reference
-identityApi
-    .WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"))
-    .WithEnvironment("WebhooksApiClient", webHooksApi.GetEndpoint("http"));
+identityApi.WithEnvironment("OrderingApiClient", orderingApi.GetEndpoint("http"));
 
 builder.Build().Run();
 
